@@ -69,14 +69,7 @@ public class ContactList {
     }
 
     public boolean hasContact(Contact contact) {
-        boolean hasContact = false;
-        for (int i = 0; i < getSize(); i++) {
-            if (contact.getId().equals(contacts.get(i).getId())) {
-                hasContact = true;
-                break;
-            }
-        }
-        return hasContact;
+        return contacts.contains(contact);
     }
 
     public Contact getContactByUsername(String username) {
