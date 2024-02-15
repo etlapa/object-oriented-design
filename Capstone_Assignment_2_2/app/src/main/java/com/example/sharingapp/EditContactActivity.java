@@ -55,6 +55,8 @@ public class EditContactActivity extends AppCompatActivity {
         }
 
         String username_str = username.getText().toString();
+        String id = contact.getId(); // Reuse the contact id
+
 
         // Check that username is unique AND username is changed (Note: if username was not changed
         // then this should be fine, because it was already unique.)
@@ -63,7 +65,6 @@ public class EditContactActivity extends AppCompatActivity {
             return;
         }
 
-        String id = contact.getId(); // Reuse the contact id
         Contact updated_contact = new Contact(username_str, email_str, id);
 
         // Edit contact
@@ -89,7 +90,6 @@ public class EditContactActivity extends AppCompatActivity {
         if (!success){
             return;
         }
-
         // End EditContactActivity
         finish();
     }

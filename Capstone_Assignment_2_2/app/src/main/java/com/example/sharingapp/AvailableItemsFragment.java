@@ -17,15 +17,13 @@ public class AvailableItemsFragment extends ItemsFragment{
 
         super.onCreateView(inflater,container, savedInstanceState);
         super.setVariables(R.layout.available_items_fragment, R.id.my_available_items);
-        super.loadItems(AvailableItemsFragment.this);
-        super.setFragmentOnItemLongClickListener();
+        super.setAdapter(AvailableItemsFragment.this);
 
         return rootView;
     }
 
     public ArrayList<Item> filterItems() {
         String status = "Available";
-        return item_list_controller.filterItemsByStatus(status);
+        return item_list.filterItemsByStatus(status);
     }
 }
-

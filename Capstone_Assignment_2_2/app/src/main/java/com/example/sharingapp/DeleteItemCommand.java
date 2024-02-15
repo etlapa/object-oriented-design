@@ -1,5 +1,4 @@
 package com.example.sharingapp;
-
 import android.content.Context;
 
 /**

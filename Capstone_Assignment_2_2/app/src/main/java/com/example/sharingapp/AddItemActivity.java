@@ -27,14 +27,11 @@ public class AddItemActivity extends AppCompatActivity {
     private int REQUEST_CODE = 1;
 
     private ItemList item_list = new ItemList();
-    private ItemListController item_list_controller = new ItemListController(item_list);
-
     private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_add_item);
 
         title = (EditText) findViewById(R.id.title);
@@ -48,7 +45,7 @@ public class AddItemActivity extends AppCompatActivity {
         photo.setImageResource(android.R.drawable.ic_menu_gallery);
 
         context = getApplicationContext();
-        item_list_controller.loadItems(context);
+        item_list.loadItems(context);
     }
 
     public void saveItem (View view) {
@@ -90,15 +87,18 @@ public class AddItemActivity extends AppCompatActivity {
             return;
         }
 
-        Item item = new Item(title_str, maker_str, description_str, image, null);
-        ItemController item_controller = new ItemController(item);
-        item_controller.setDimensions(length_str, width_str, height_str);
+        Dimensions dimensions = new Dimensions(length_str, width_str, height_str);
+        Item item = new Item(title_str, maker_str, description_str, dimensions, image, null );
 
-        // Add item
-        boolean success = item_list_controller.addItem(item, context);
-        if (!success) {
+// Add item
+        AddItemCommand add_item_command = new AddItemCommand(item_list, item, context);
+        add_item_command.execute();
+
+        boolean success = add_item_command.isExecuted();
+        if (!success){
             return;
         }
+
 
         // End AddItemActivity
         Intent intent = new Intent(this, MainActivity.class);
@@ -118,8 +118,9 @@ public class AddItemActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int request_code, int result_code, Intent intent){
-        if (request_code == REQUEST_CODE && result_code == RESULT_OK){
+    protected void onActivityResult(int request_code, int result_code, Intent intent) {
+        super.onActivityResult(request_code, result_code, intent);
+        if (request_code == REQUEST_CODE && result_code == RESULT_OK) {
             Bundle extras = intent.getExtras();
             image = (Bitmap) extras.get("data");
             photo.setImageBitmap(image);

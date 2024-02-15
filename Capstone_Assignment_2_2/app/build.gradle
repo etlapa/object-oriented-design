@@ -1,9 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
-    namespace 'com.example.sharingapp'
     compileSdkVersion 29
-    //buildToolsVersion "25.0.0"
     defaultConfig {
         applicationId "com.example.sharingapp"
         minSdkVersion 19
@@ -31,6 +29,3 @@ dependencies {
     implementation 'com.google.android.material:material:1.2.1'
     testImplementation 'junit:junit:4.12'
 }
-
-
-

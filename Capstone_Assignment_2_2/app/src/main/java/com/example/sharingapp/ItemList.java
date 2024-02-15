@@ -17,7 +17,7 @@ import java.util.ArrayList;
 /**
  * ItemList class
  */
-public class ItemList extends Observable{
+public class ItemList {
 
     private static ArrayList<Item> items;
     private String FILENAME = "items.sav";
@@ -28,7 +28,6 @@ public class ItemList extends Observable{
 
     public void setItems(ArrayList<Item> item_list) {
         items = item_list;
-        notifyObservers();
     }
 
     public ArrayList<Item> getItems() {
@@ -37,12 +36,10 @@ public class ItemList extends Observable{
 
     public void addItem(Item item) {
         items.add(item);
-        notifyObservers();
     }
 
     public void deleteItem(Item item) {
         items.remove(item);
-        notifyObservers();
     }
 
     public Item getItem(int index) {
@@ -55,7 +52,7 @@ public class ItemList extends Observable{
             if (item.getId().equals(i.getId())) {
                 return pos;
             }
-            pos = pos + 1;
+            pos = pos+1;
         }
         return -1;
     }
@@ -70,8 +67,7 @@ public class ItemList extends Observable{
             FileInputStream fis = context.openFileInput(FILENAME);
             InputStreamReader isr = new InputStreamReader(fis);
             Gson gson = new Gson();
-            Type listType = new TypeToken<ArrayList<Item>>() {
-            }.getType();
+            Type listType = new TypeToken<ArrayList<Item>>() {}.getType();
             items = gson.fromJson(isr, listType); // temporary
             fis.close();
         } catch (FileNotFoundException e) {
@@ -79,7 +75,6 @@ public class ItemList extends Observable{
         } catch (IOException e) {
             items = new ArrayList<Item>();
         }
-        notifyObservers();
     }
 
     public boolean saveItems(Context context) {
@@ -100,6 +95,17 @@ public class ItemList extends Observable{
         return true;
     }
 
+
+    public ArrayList<Item> filterItemsByStatus(String status){
+        ArrayList<Item> selected_items = new ArrayList<>();
+        for (Item i: items) {
+            if (i.getStatus().equals(status)) {
+                selected_items.add(i);
+            }
+        }
+        return selected_items;
+    }
+
     public ArrayList<Contact> getActiveBorrowers() {
 
         ArrayList<Contact> active_borrowers = new ArrayList<Contact>();
@@ -112,16 +118,5 @@ public class ItemList extends Observable{
         return active_borrowers;
     }
 
-    public ArrayList<Item> filterItemsByStatus(String status){
-        ArrayList<Item> selected_items = new ArrayList<>();
-        for (Item i: items) {
-            if (i.getStatus().equals(status)) {
-                selected_items.add(i);
-            }
-        }
-        return selected_items;
-    }
 }
-
-
 

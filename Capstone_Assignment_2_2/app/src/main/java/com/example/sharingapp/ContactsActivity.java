@@ -10,34 +10,32 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 /**
  * Displays a list of all contacts
- * Note: You will not be able edit/delete contacts which are "active" borrowers
  */
-public class ContactsActivity extends AppCompatActivity implements Observer {
+public class ContactsActivity extends AppCompatActivity {
 
     private ContactList contact_list = new ContactList();
-    private ContactListController contact_list_controller = new ContactListController(contact_list);
-
-    private ContactList active_borrowers_list = new ContactList();
-    private ContactListController active_borrowers_list_controller = new ContactListController(active_borrowers_list);
-
-    private ItemList item_list = new ItemList();
-    private ItemListController item_list_controller = new ItemListController(item_list);
-
     private ListView my_contacts;
     private ArrayAdapter<Contact> adapter;
     private Context context;
+    private ItemList item_list = new ItemList();
+    private ContactList active_borrowers_list = new ContactList();
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contacts);
 
         context = getApplicationContext();
+        contact_list.loadContacts(context);
+        item_list.loadItems(context);
 
-        contact_list_controller.addObserver(this);
-        contact_list_controller.loadContacts(context);
-        item_list_controller.loadItems(context);
+        my_contacts = (ListView) findViewById(R.id.my_contacts);
+        adapter = new ContactAdapter(ContactsActivity.this, contact_list.getContacts());
+        my_contacts.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
 
         // When contact is long clicked, this starts EditContactActivity
         my_contacts.setOnItemLongClickListener(new android.widget.AdapterView.OnItemLongClickListener() {
@@ -47,10 +45,12 @@ public class ContactsActivity extends AppCompatActivity implements Observer {
 
                 Contact contact = adapter.getItem(pos);
 
-                // Do not allow an "active" borrower to be edited
-                active_borrowers_list_controller.setContacts(item_list_controller.getActiveBorrowers());
-                if (active_borrowers_list_controller != null) {
-                    if (active_borrowers_list_controller.hasContact(contact)) {
+                ArrayList<Contact> active_borrowers = item_list.getActiveBorrowers();
+                active_borrowers_list.setContacts(active_borrowers);
+
+                // Prevent contact from editing an "active" borrower.
+                if (active_borrowers_list != null) {
+                    if (active_borrowers_list.hasContact(contact)) {
                         CharSequence text = "Cannot edit or delete active borrower!";
                         int duration = Toast.LENGTH_SHORT;
                         Toast.makeText(context, text, duration).show();
@@ -58,8 +58,8 @@ public class ContactsActivity extends AppCompatActivity implements Observer {
                     }
                 }
 
-                contact_list_controller.loadContacts(context); // must load contacts again here
-                int meta_pos = contact_list_controller.getIndex(contact);
+                contact_list.loadContacts(context); // Must load contacts again here
+                int meta_pos = contact_list.getIndex(contact);
 
                 Intent intent = new Intent(context, EditContactActivity.class);
                 intent.putExtra("position", meta_pos);
@@ -73,31 +73,18 @@ public class ContactsActivity extends AppCompatActivity implements Observer {
     @Override
     protected void onStart() {
         super.onStart();
+
         context = getApplicationContext();
-        contact_list_controller.loadContacts(context);
+        contact_list.loadContacts(context);
+
+        my_contacts = (ListView) findViewById(R.id.my_contacts);
+        adapter = new ContactAdapter(ContactsActivity.this, contact_list.getContacts());
+        my_contacts.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 
     public void addContactActivity(View view){
         Intent intent = new Intent(this, AddContactActivity.class);
         startActivity(intent);
-    }
-
-    /**
-     * Called when the activity is destroyed, thus we remove this activity as a listener
-     */
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        contact_list_controller.removeObserver(this);
-    }
-
-    /**
-     * Update the view
-     */
-    public void update(){
-        my_contacts = (ListView) findViewById(R.id.my_contacts);
-        adapter = new ContactAdapter(ContactsActivity.this, contact_list_controller.getContacts());
-        my_contacts.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
     }
 }

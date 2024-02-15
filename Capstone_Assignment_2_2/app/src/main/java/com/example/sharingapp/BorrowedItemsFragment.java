@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 /**
- * Displays a list of all "Borrowed" Items
+ * Displays a list of all "Borrowed" items
  */
 public class BorrowedItemsFragment extends ItemsFragment {
 
@@ -17,14 +17,13 @@ public class BorrowedItemsFragment extends ItemsFragment {
 
         super.onCreateView(inflater,container, savedInstanceState);
         super.setVariables(R.layout.borrowed_items_fragment, R.id.my_borrowed_items);
-        super.loadItems(BorrowedItemsFragment.this);
-        super.setFragmentOnItemLongClickListener();
+        super.setAdapter(BorrowedItemsFragment.this);
 
         return rootView;
     }
 
     public ArrayList<Item> filterItems() {
         String status = "Borrowed";
-        return item_list_controller.filterItemsByStatus(status);
+        return item_list.filterItemsByStatus(status);
     }
 }

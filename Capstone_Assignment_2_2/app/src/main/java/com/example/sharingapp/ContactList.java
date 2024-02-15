@@ -15,7 +15,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 /**
- * ContactList Class
+ * ContactList class
  */
 public class ContactList {
 
@@ -36,9 +36,9 @@ public class ContactList {
 
     public ArrayList<String> getAllUsernames(){
         ArrayList<String> username_list = new ArrayList<String>();
-        for (Contact c : contacts){
-            username_list.add(c.getUsername());
-            }
+        for (Contact u : contacts){
+            username_list.add(u.getUsername());
+        }
         return username_list;
     }
 
@@ -58,7 +58,7 @@ public class ContactList {
         return contacts.size();
     }
 
-    public Contact getUserByUsername(String username){
+    public Contact getContactByUsername(String username){
         for (Contact c : contacts){
             if (c.getUsername().equals(username)){
                 return c;
@@ -112,10 +112,6 @@ public class ContactList {
         }
     }
 
-    /**
-     * @param context
-     * @return true: if save is successful, false: if save is unsuccessful
-     */
     public boolean saveContacts(Context context) {
         try {
             FileOutputStream fos = context.openFileOutput(FILENAME, 0);

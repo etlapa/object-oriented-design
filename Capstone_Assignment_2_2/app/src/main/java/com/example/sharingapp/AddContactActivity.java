@@ -49,11 +49,9 @@ public class AddContactActivity extends AppCompatActivity {
             return;
         }
 
-        for (Contact c : contact_list.getContacts()) {
-            if (c.getUsername().equals(username_str)) {
-                username.setError("Username already taken!");
-                return;
-            }
+        if (!contact_list.isUsernameAvailable(username_str)){
+            username.setError("Username already taken!");
+            return;
         }
 
         Contact contact = new Contact(username_str, email_str, null);
@@ -71,3 +69,4 @@ public class AddContactActivity extends AppCompatActivity {
         finish();
     }
 }
+
