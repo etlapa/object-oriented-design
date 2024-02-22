@@ -1,0 +1,384 @@
+@startuml
+class com.example.sharingapp.EditItemCommand {
+- ItemList item_list
+- Item old_item
+- Item new_item
+- Context context
++ void execute()
+}
+class com.example.sharingapp.ItemController {
+- Item item
++ String getId()
++ void setId()
++ void setTitle(String)
++ String getTitle()
++ void setMaker(String)
++ String getMaker()
++ void setDescription(String)
++ String getDescription()
++ void setDimensions(String,String,String)
++ String getLength()
++ String getWidth()
++ String getHeight()
++ void setStatus(String)
++ String getStatus()
++ void setBorrower(Contact)
++ Contact getBorrower()
++ void addImage(Bitmap)
++ Bitmap getImage()
++ Item getItem()
++ void addObserver(Observer)
++ void removeObserver(Observer)
+}
+class com.example.sharingapp.AddContactCommand {
+- ContactList contact_list
+- Contact contact
+- Context context
++ void execute()
+}
+class com.example.sharingapp.DeleteContactCommand {
+- ContactList contact_list
+- Contact contact
+- Context context
++ void execute()
+}
+class com.example.sharingapp.AddItemCommand {
+- ItemList item_list
+- Item item
+- Context context
++ void execute()
+}
+class com.example.sharingapp.ContactAdapter {
+- LayoutInflater inflater
+- Context context
++ View getView(int,View,ViewGroup)
+}
+class com.example.sharingapp.ContactController {
+- Contact contact
++ String getId()
++ void setId()
++ void updateId(String)
++ String getUsername()
++ void setUsername(String)
++ String getEmail()
++ void setEmail(String)
++ Contact getContact()
++ void addObserver(Observer)
++ void removeObserver(Observer)
+}
+class com.example.sharingapp.DeleteItemCommand {
+- ItemList item_list
+- Item item
+- Context context
++ void execute()
+}
+class com.example.sharingapp.BorrowedItemsFragment {
++ View onCreateView(LayoutInflater,ViewGroup,Bundle)
++ ArrayList<Item> filterItems()
+}
+class com.example.sharingapp.Observable {
+- ArrayList<Observer> observers
++ void notifyObservers()
++ void addObserver(Observer)
++ void removeObserver(Observer)
+}
+abstract class com.example.sharingapp.Command {
+- boolean is_executed
++ {abstract}void execute()
++ boolean isExecuted()
++ void setIsExecuted(boolean)
+}
+class com.example.sharingapp.ContactListController {
+- ContactList contact_list
++ void setContacts(ArrayList<Contact>)
++ ArrayList<Contact> getContacts()
++ ArrayList<String> getAllUsernames()
++ boolean addContact(Contact,Context)
++ boolean deleteContact(Contact,Context)
++ boolean editContact(Contact,Contact,Context)
++ Contact getContact(int)
++ int getSize()
++ Contact getContactByUsername(String)
++ boolean hasContact(Contact)
++ int getIndex(Contact)
++ void loadContacts(Context)
++ boolean isUsernameAvailable(String)
++ void addObserver(Observer)
++ void removeObserver(Observer)
+}
+class com.example.sharingapp.SectionsPagerAdapter {
++ Fragment getItem(int)
++ int getCount()
++ CharSequence getPageTitle(int)
+}
+class com.example.sharingapp.MainActivity {
+# void onCreate(Bundle)
++ boolean onCreateOptionsMenu(Menu)
++ boolean onOptionsItemSelected(MenuItem)
++ void addItemActivity(View)
+}
+class com.example.sharingapp.ItemList {
+- {static} ArrayList<Item> items
+- String FILENAME
++ void setItems(ArrayList<Item>)
++ ArrayList<Item> getItems()
++ void addItem(Item)
++ void deleteItem(Item)
++ Item getItem(int)
++ int getIndex(Item)
++ int getSize()
++ void loadItems(Context)
++ boolean saveItems(Context)
++ ArrayList<Contact> getActiveBorrowers()
++ ArrayList<Item> filterItemsByStatus(String)
+}
+class com.example.sharingapp.AddContactActivity {
+- ContactList contact_list
+- ContactListController contact_list_controller
+- Context context
+- EditText username
+- EditText email
+# void onCreate(Bundle)
++ void saveContact(View)
+}
+class com.example.sharingapp.ItemAdapter {
+- LayoutInflater inflater
+- Fragment fragment
+- Context context
++ View getView(int,View,ViewGroup)
+}
+class com.example.sharingapp.AvailableItemsFragment {
++ View onCreateView(LayoutInflater,ViewGroup,Bundle)
++ ArrayList<Item> filterItems()
+}
+abstract class com.example.sharingapp.ItemsFragment {
+- ItemList item_list
+~ ItemListController item_list_controller
+~ View rootView
+- ListView list_view
+- ArrayAdapter<Item> adapter
+- ArrayList<Item> selected_items
+- LayoutInflater inflater
+- ViewGroup container
+- Context context
+- Fragment fragment
+- boolean update
++ View onCreateView(LayoutInflater,ViewGroup,Bundle)
++ void setVariables(int,int)
++ void loadItems(Fragment)
++ void setFragmentOnItemLongClickListener()
++ {abstract}ArrayList<Item> filterItems()
++ void onDestroy()
++ void update()
+}
+interface com.example.sharingapp.Observer {
++ void update()
+}
+class com.example.sharingapp.AddItemActivity {
+- EditText title
+- EditText maker
+- EditText description
+- EditText length
+- EditText width
+- EditText height
+- ImageView photo
+- Bitmap image
+- int REQUEST_CODE
+- ItemList item_list
+- ItemListController item_list_controller
+- Context context
+# void onCreate(Bundle)
++ void saveItem(View)
++ void addPhoto(View)
++ void deletePhoto(View)
+# void onActivityResult(int,int,Intent)
+}
+class com.example.sharingapp.ContactList {
+- {static} ArrayList<Contact> contacts
+- String FILENAME
++ void setContacts(ArrayList<Contact>)
++ ArrayList<Contact> getContacts()
++ ArrayList<String> getAllUsernames()
++ void addContact(Contact)
++ void deleteContact(Contact)
++ Contact getContact(int)
++ int getSize()
++ Contact getContactByUsername(String)
++ boolean hasContact(Contact)
++ int getIndex(Contact)
++ void loadContacts(Context)
++ boolean saveContacts(Context)
++ boolean isUsernameAvailable(String)
+}
+class com.example.sharingapp.Contact {
+- String username
+- String email
+- String id
++ String getId()
++ void setId()
++ void updateId(String)
++ String getUsername()
++ void setUsername(String)
++ String getEmail()
++ void setEmail(String)
+}
+class com.example.sharingapp.Dimensions {
+- String length
+- String width
+- String height
++ String getLength()
++ String getWidth()
++ String getHeight()
+}
+class com.example.sharingapp.ContactsActivity {
+- ContactList contact_list
+- ContactListController contact_list_controller
+- ContactList active_borrowers_list
+- ContactListController active_borrowers_list_controller
+- ItemList item_list
+- ItemListController item_list_controller
+- ListView my_contacts
+- ArrayAdapter<Contact> adapter
+- Context context
+# void onCreate(Bundle)
+# void onStart()
++ void addContactActivity(View)
+# void onDestroy()
++ void update()
+}
+class com.example.sharingapp.EditContactCommand {
+- ContactList contact_list
+- Contact old_contact
+- Contact new_contact
+- Context context
++ void execute()
+}
+class com.example.sharingapp.ItemListController {
+- ItemList item_list
++ void setItems(ArrayList<Item>)
++ ArrayList<Item> getItems()
++ boolean addItem(Item,Context)
++ boolean deleteItem(Item,Context)
++ boolean editItem(Item,Item,Context)
++ Item getItem(int)
++ int getIndex(Item)
++ int getSize()
++ void loadItems(Context)
++ ArrayList<Contact> getActiveBorrowers()
++ ArrayList<Item> filterItemsByStatus(String)
++ void addObserver(Observer)
++ void removeObserver(Observer)
+}
+class com.example.sharingapp.Item {
+- String title
+- String maker
+- String description
+- Dimensions dimensions
+- String status
+- Contact borrower
+# Bitmap image
+# String image_base64
+- String id
++ String getId()
++ void setId()
++ void updateId(String)
++ void setTitle(String)
++ String getTitle()
++ void setMaker(String)
++ String getMaker()
++ void setDescription(String)
++ String getDescription()
++ void setDimensions(String,String,String)
++ String getLength()
++ String getWidth()
++ String getHeight()
++ void setStatus(String)
++ String getStatus()
++ void setBorrower(Contact)
++ Contact getBorrower()
++ void addImage(Bitmap)
++ Bitmap getImage()
+}
+class com.example.sharingapp.EditItemActivity {
+- ItemList item_list
+- ItemListController item_list_controller
+- Item item
+- ItemController item_controller
+- Context context
+- ContactList contact_list
+- ContactListController contact_list_controller
+- Bitmap image
+- int REQUEST_CODE
+- ImageView photo
+- EditText title
+- EditText maker
+- EditText description
+- EditText length
+- EditText width
+- EditText height
+- Spinner borrower_spinner
+- TextView borrower_tv
+- Switch status
+- EditText invisible
+- ArrayAdapter<String> adapter
+- boolean on_create_update
+- int pos
+# void onCreate(Bundle)
++ void addPhoto(View)
++ void deletePhoto(View)
+# void onActivityResult(int,int,Intent)
++ void deleteItem(View)
++ void saveItem(View)
++ void toggleSwitch(View)
++ void update()
+}
+class com.example.sharingapp.EditContactActivity {
+- ContactList contact_list
+- ContactListController contact_list_controller
+- Contact contact
+- ContactController contact_controller
+- EditText email
+- EditText username
+- Context context
+- int pos
+- boolean on_create_update
+# void onCreate(Bundle)
++ void saveContact(View)
++ void deleteContact(View)
+# void onDestroy()
++ void update()
+}
+class com.example.sharingapp.AllItemsFragment {
++ View onCreateView(LayoutInflater,ViewGroup,Bundle)
++ ArrayList<Item> filterItems()
+}
+
+
+com.example.sharingapp.Command <|-- com.example.sharingapp.EditItemCommand
+com.example.sharingapp.Command <|-- com.example.sharingapp.AddContactCommand
+com.example.sharingapp.Command <|-- com.example.sharingapp.DeleteContactCommand
+com.example.sharingapp.Command <|-- com.example.sharingapp.AddItemCommand
+android.widget.ArrayAdapter <|-- com.example.sharingapp.ContactAdapter
+com.example.sharingapp.Command <|-- com.example.sharingapp.DeleteItemCommand
+com.example.sharingapp.ItemsFragment <|-- com.example.sharingapp.BorrowedItemsFragment
+androidx.fragment.app.FragmentPagerAdapter <|-- com.example.sharingapp.SectionsPagerAdapter
+androidx.appcompat.app.AppCompatActivity <|-- com.example.sharingapp.MainActivity
+com.example.sharingapp.Observable <|-- com.example.sharingapp.ItemList
+androidx.appcompat.app.AppCompatActivity <|-- com.example.sharingapp.AddContactActivity
+android.widget.ArrayAdapter <|-- com.example.sharingapp.ItemAdapter
+com.example.sharingapp.ItemsFragment <|-- com.example.sharingapp.AvailableItemsFragment
+com.example.sharingapp.Observer <|.. com.example.sharingapp.ItemsFragment
+androidx.fragment.app.Fragment <|-- com.example.sharingapp.ItemsFragment
+androidx.appcompat.app.AppCompatActivity <|-- com.example.sharingapp.AddItemActivity
+com.example.sharingapp.Observable <|-- com.example.sharingapp.ContactList
+com.example.sharingapp.Observable <|-- com.example.sharingapp.Contact
+com.example.sharingapp.Observer <|.. com.example.sharingapp.ContactsActivity
+androidx.appcompat.app.AppCompatActivity <|-- com.example.sharingapp.ContactsActivity
+com.example.sharingapp.Command <|-- com.example.sharingapp.EditContactCommand
+com.example.sharingapp.Observable <|-- com.example.sharingapp.Item
+com.example.sharingapp.Observer <|.. com.example.sharingapp.EditItemActivity
+androidx.appcompat.app.AppCompatActivity <|-- com.example.sharingapp.EditItemActivity
+com.example.sharingapp.Observer <|.. com.example.sharingapp.EditContactActivity
+androidx.appcompat.app.AppCompatActivity <|-- com.example.sharingapp.EditContactActivity
+com.example.sharingapp.ItemsFragment <|-- com.example.sharingapp.AllItemsFragment
+@enduml

@@ -1,0 +1,39 @@
+@startuml
+
+class ContactList {
+- {static} ArrayList<Contact> contacts
+- String FILENAME
++ void setContacts(ArrayList<Contact>)
++ ArrayList<Contact> getContacts()
++ ArrayList<String> getAllUsernames()
++ void addContact(Contact)
++ void deleteContact(Contact)
++ Contact getContact(int)
++ int getSize()
++ Contact getContactByUsername(String)
++ boolean hasContact(Contact)
++ int getIndex(Contact)
++ void loadContacts(Context)
++ boolean saveContacts(Context)
++ boolean isUsernameAvailable(String)
+}
+note right of ContactList
+    Current implementation
+end note
+
+class Contact {
+- String username
+- String email
+- String id
++ String getId()
++ void setId()
++ void updateId(String)
++ String getUsername()
++ void setUsername(String)
++ String getEmail()
++ void setEmail(String)
+}
+
+ContactList o-- Contact
+
+@enduml

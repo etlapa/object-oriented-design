@@ -1,0 +1,98 @@
+@startuml
+
+class ContactList {
+- {static} List<Contact> contacts
+- {static} String FILENAME
+- FileProcessor<Contact> fileProcessor
++ void setContacts(List<Contact>)
++ List<Contact> getContacts()
++ List<String> getAllUsernames()
++ void addContact(Contact)
++ void deleteContact(Contact)
++ Contact getContact(int)
++ int getSize()
++ Contact getContactByUsername(String)
++ boolean hasContact(Contact)
++ int getIndex(Contact)
++ void loadContacts(Context)
++ boolean saveContacts(Context)
++ boolean isUsernameAvailable(String)
+}
+class Contact {
+- String username
+- String email
+- String id
++ String getId()
++ void setId()
++ void updateId(String)
++ String getUsername()
++ void setUsername(String)
++ String getEmail()
++ void setEmail(String)
+}
+class FileProcessor<T> {
+- String filename
+- List<T> elements
++ List<T> loadContacts(Context)
++ boolean saveContacts(Context)
+}
+note bottom of FileProcessor
+    Suggested class to
+    load/save data
+    (use of generics)
+end note
+
+class ItemList {
+- {static} List<Item> items
+- String FILENAME
+- FileProcessor<Item> fileProcessor
++ void setItems(List<Item>)
++ List<Item> getItems()
++ void addItem(Item)
++ void deleteItem(Item)
++ Item getItem(int)
++ int getIndex(Item)
++ int getSize()
++ void loadItems(Context)
++ boolean saveItems(Context)
++ List<Contact> getActiveBorrowers()
++ List<Item> filterItemsByStatus(String)
+}
+
+class Item {
+- String title
+- String maker
+- String description
+- Dimensions dimensions
+- String status
+- Contact borrower
+# Bitmap image
+# String image_base64
+- String id
++ String getId()
++ void setId()
++ void updateId(String)
++ void setTitle(String)
++ String getTitle()
++ void setMaker(String)
++ String getMaker()
++ void setDescription(String)
++ String getDescription()
++ void setDimensions(String,String,String)
++ String getLength()
++ String getWidth()
++ String getHeight()
++ void setStatus(String)
++ String getStatus()
++ void setBorrower(Contact)
++ Contact getBorrower()
++ void addImage(Bitmap)
++ Bitmap getImage()
+}
+
+ContactList o-- Contact
+ContactList -right-> FileProcessor: delegates
+ItemList -left-> FileProcessor: delegates
+ItemList o-- Item
+
+@enduml
